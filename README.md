@@ -25,7 +25,8 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
     
 ###Locking functions after build
-    var student = new StudentClassBuilder()
+    var StudentClassBuilderLocked = new BuildDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var student = new StudentClassBuilderLocked()
       .name("John")
       .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; }
       .build();

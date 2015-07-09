@@ -4,7 +4,7 @@
   "description": "Decorate any Javascript object with a convenient builder, which returns an immutable object",
   "main": "builder-decorator.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt mochaTest"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/Winwardo/js-builder-decorator/issues"
   },
-  "homepage": "https://github.com/Winwardo/js-builder-decorator"
+  "homepage": "https://github.com/Winwardo/js-builder-decorator",
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.2.5"
+  }
 }

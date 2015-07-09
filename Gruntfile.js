@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     // Configure a mochaTest task
-    mochaTest: {
+    mocha: {
       test: {
         options: {
           reporter: 'spec',
@@ -17,5 +17,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', 'mochaTest');
+  grunt.registerTask('build', []);
+  grunt.registerTask('test', 'mocha');
 };

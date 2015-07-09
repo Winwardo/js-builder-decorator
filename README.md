@@ -2,6 +2,7 @@
 Decorate any Javascript object with a convenient builder, which returns an immutable object with getters.
 
 [![Build Status](https://travis-ci.org/Winwardo/js-builder-decorator.svg?branch=master)](https://travis-ci.org/Winwardo/js-builder-decorator)
+[![npm version](https://badge.fury.io/js/js-builder-decorator.svg)](http://badge.fury.io/js/js-builder-decorator)
 
 ###Standard usage:
 

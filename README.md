@@ -9,6 +9,7 @@ Decorate any Javascript object with a convenient builder, which returns an immut
       this.name = "Some default name";
       this.age = undefined;
       this.address = {};
+      this.prettyName = function(){};
     };
     var StudentClassBuilder = new BuildDecorator(StudentClass);
   

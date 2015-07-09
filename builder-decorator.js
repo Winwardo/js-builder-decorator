@@ -9,10 +9,16 @@ module.exports = {
     /**
      * Decorate any given object or class with builder functions
      */
-    BuildDecorator: function(decorated, lockFunctionsAfterBuild) {
+    BuildDecorator: function(decorated, options) {
+        if (options == undefined) {
+            options = {};
+        }
         return function(){
             if (decorated instanceof Function) {
                 decorated = new decorated();
+            }
+            else if (decorated instanceof Array) {
+                throw(new Error("An array may not be decorated."));
             }
             
             this.builderData = Object.create(decorated);
@@ -39,7 +45,7 @@ module.exports = {
                 
                 var builtObj = {};
                 for (var y in builderData) {
-                    if (lockFunctionsAfterBuild && decorated[y] instanceof Function) {
+                    if (options.lockFunctionsAfterBuild && decorated[y] instanceof Function) {
                         builtObj[y] = builderData[y];
                     }
                     else
@@ -55,36 +61,3 @@ module.exports = {
         };
     },
 };
-
-//var defaultAddress = {
-//    street: "41 Oakdene Road",
-//    country: "Mongolia"
-//};
-//
-//var StudentObject = {
-//    name: "Some name to overwrite",
-//    age: undefined,
-//    address: defaultAddress,
-//    pretty: function() {
-//        return "My name is " + this.name() + ", and I am " + this.age() + " years old.";
-//    }
-//};
-//
-//var StudentClass = function() {
-//    this.name = "A name";
-//    this.age = "An age!";
-//    this.address = defaultAddress;
-//    this.pretty = function(){ return "I'm " + this.name() + "!"; };
-//};
-//
-//var StudentClassBuilder = new BuildDecorator(StudentClass, true);
-//var StudentObjectBuilder = new BuildDecorator(StudentObject, true);
-//var StudentBuilderNoFunctionLock = new BuildDecorator(StudentObject, false);
-//
-//var john = new StudentClassBuilder().name("James").age(19).age(20).build();
-//var mary = new StudentObjectBuilder().name("Mary").age(18).build();
-//var alice = new StudentBuilderNoFunctionLock().name("Alice").pretty(function(){ return "I'm not locked!"; }).build();
-//
-//console.log(john.name(), john.age(), john.address(), john.pretty());
-//console.log(mary.name(), mary.age(), mary.address(), mary.pretty());
-//console.log(alice.name(), alice.age(), alice.address(), alice.pretty(), alice.pretty()());

@@ -1,6 +1,6 @@
 {
   "name": "js-builder-decorator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Decorate any Javascript object with a convenient builder, which returns an immutable object",
   "main": "main.js",
   "scripts": {

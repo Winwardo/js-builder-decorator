@@ -36,6 +36,16 @@ Decorate any Javascript object with a convenient builder, which returns an immut
       
     student.name();       // "John"
     student.prettyName(); // "Hi, I'm John!"
+    
+###Enforcing no null fields
+	// Throwing exception if any field isn't set
+	var StudentClassBuilderNoNulls = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+
+	try {
+		var student = new StudentClassBuilderNoNulls().build(); // This throws an exception
+	} catch (E) {
+		console.log(E); // The following fields were not set: name,age,address,prettyName
+	}
 
 ##Installation
 If you have Node.js installed, run `npm i js-builder-decorator` in your project directory.  

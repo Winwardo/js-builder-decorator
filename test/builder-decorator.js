@@ -1,6 +1,6 @@
 var should = require('chai').should(),
     expect = require('chai').expect
-    builder_decorator = require('../builder-decorator'),
+    builder_decorator = require('../src/builder-decorator'),
     BuilderDecorator = builder_decorator.BuilderDecorator;
 
 var student1 = {

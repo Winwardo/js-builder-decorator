@@ -18,7 +18,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'builder-decorator.min.js': ['builder-decorator.js']
+          'builder-decorator.min.js': ['src/builder-decorator.js']
         }
       },
       options: {

@@ -12,13 +12,13 @@ Decorate any Javascript object with a convenient builder, which returns an immut
       this.address = {};
       this.prettyName = function(){};
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass);
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
   
     var student = new StudentClassBuilder()
       .name("John")
       .age(17)
       .address({postcode: "90210"})
-      .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; }
+      .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; })
       .build();
       
     student.name();       // "John"
@@ -27,10 +27,10 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
     
 ###Locking functions after build
-    var StudentClassBuilderLocked = new BuildDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var StudentClassBuilderLocked = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     var student = new StudentClassBuilderLocked()
       .name("John")
-      .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; }
+      .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; })
       .build();
       
     student.name();       // "John"

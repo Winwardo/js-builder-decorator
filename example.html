@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="builder-decorator.min.js"></script>	
+		<script>
+			// Standard usage
+			var StudentClass = function(){
+			  this.name = "Some default name";
+			  this.age = undefined;
+			  this.address = {};
+			  this.prettyName = function(){};
+			};
+			var StudentClassBuilder = new BuilderDecorator(StudentClass);
+			
+			var student = new StudentClassBuilder()
+			  .name("John")
+			  .age(17)
+			  .address({postcode: "90210"})
+			  .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; })
+			  .build();
+			
+			console.log(student.name());       // "John"
+			console.log(student.age());        // 17
+			console.log(student.address());    // {postcode: "90210"}
+			console.log(student.prettyName()); // function(){ return "Hi, I'm " + this.name() + "!"; }
+			
+			// Locking functions after build			
+			var StudentClassBuilderLocked = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+			var student = new StudentClassBuilderLocked()
+			  .name("John")
+			  .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; })
+			  .build();
+			
+			console.log(student.name());       // "John"
+			console.log(student.prettyName()); // "Hi, I'm John!"
+		</script>		
+	</head>
+	<body>
+	</body>
+</html>

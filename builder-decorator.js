@@ -60,7 +60,7 @@
     };
     
     // NPM exports
-    if (module !== undefined) {
+    if(typeof module !== 'undefined') {
         module.exports = {BuilderDecorator: BuilderDecorator};
     }
     

@@ -35,3 +35,7 @@ Decorate any Javascript object with a convenient builder, which returns an immut
       
     student.name();       // "John"
     student.prettyName(); // "Hi, I'm John!"
+
+##Installation
+If you have Node.js installed, run `npm i js-builder-decorator` in your project directory.  
+Else, you can download the latest version from Github [here](https://raw.githubusercontent.com/Winwardo/js-builder-decorator/master/builder-decorator.min.js).

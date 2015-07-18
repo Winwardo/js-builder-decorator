@@ -1,4 +1,5 @@
 var should = require('chai').should(),
+    expect = require('chai').expect
     builder_decorator = require('../builder-decorator'),
     BuilderDecorator = builder_decorator.BuilderDecorator;
 
@@ -14,7 +15,7 @@ var student2 = {
 };
 
 
-describe('#BuildDecorator', function() {
+describe('#BuilderDecorator', function() {
   it('decorates a class', function() {
     var StudentClass = function(){
       this.name = "A name";
@@ -125,4 +126,48 @@ describe('#BuildDecorator', function() {
     student.prettyName()().should.equal("Hey!");
   });
   
+  it('allows null fields by default', function(){
+    var StudentClass = function(){
+      this.name = "A name";
+    };
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    
+    var student = new StudentClassBuilder().name(null).build();
+    should.equal(student.name(), null);
+  });
+  
+  it('defaults to the object\'s value if not set', function(){
+    var StudentClass = function(){
+      this.name = "A name";
+    };
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    
+    var student = new StudentClassBuilder().build();
+    should.equal(student.name(), "A name");
+  });
+  
+  it('throws a null-field exception if we tell it to and forget to set a field', function(){
+    var StudentClass = function(){
+      this.name = "A name";
+    };
+    var StudentClassBuilder = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+    
+    // Name not set
+    expect(function(){
+      var student = new StudentClassBuilder().build();
+    }).to.throw("The following fields were not set: name");
+  });
+  
+  it('throws a null-field exception if we tell it to and forget to set multiple fields', function(){
+    var StudentClass = function(){
+      this.name = "A name";
+      this.age = 17;
+    };
+    var StudentClassBuilder = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+    
+    // Name not set
+    expect(function(){
+      var student = new StudentClassBuilder().build();
+    }).to.throw("The following fields were not set: name,age");
+  });
 });

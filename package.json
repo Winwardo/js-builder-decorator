@@ -2,7 +2,7 @@
   "name": "js-builder-decorator",
   "version": "0.1.1",
   "description": "Decorate any Javascript object with a convenient builder, which returns an immutable object",
-  "main": "builder-decorator.js",
+  "main": "main.js",
   "scripts": {
     "test": "grunt mochaTest"
   },

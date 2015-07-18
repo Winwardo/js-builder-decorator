@@ -1,15 +1,13 @@
 //! MIT License, Topher Winward 2015.
 //! https://github.com/Winwardo/js-builder-decorator
+
 "use strict";
 
-/**
- * Decorate any given object or class with builder functions
- */
-module.exports = {
+(function(){
     /**
      * Decorate any given object or class with builder functions
      */
-    BuildDecorator: function(decorated, options) {
+    var BuilderDecorator = function(decorated, options) {
         if (options == undefined) {
             options = {};
         }
@@ -58,6 +56,16 @@ module.exports = {
             };
             
             return builderObj;
-        };
-    },
-};
+        }
+    };
+    
+    // NPM exports
+    if (module !== undefined) {
+        module.exports = {BuilderDecorator: BuilderDecorator};
+    }
+    
+    // Standard js exports
+    if(typeof window !== 'undefined') {
+        window.BuilderDecorator = BuilderDecorator;
+    }
+})();

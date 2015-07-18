@@ -1,6 +1,6 @@
 var should = require('chai').should(),
     builder_decorator = require('../builder-decorator'),
-    BuildDecorator = builder_decorator.BuildDecorator;
+    BuilderDecorator = builder_decorator.BuilderDecorator;
 
 var student1 = {
   name: "John",
@@ -19,7 +19,7 @@ describe('#BuildDecorator', function() {
     var StudentClass = function(){
       this.name = "A name";
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass);
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
     
     var student = new StudentClassBuilder().name(student1.name).build();
     student.name().should.equal(student1.name);
@@ -29,7 +29,7 @@ describe('#BuildDecorator', function() {
     var StudentObject = {
       name: "A name"
     };
-    var StudentObjectBuilder = new BuildDecorator(StudentObject);
+    var StudentObjectBuilder = new BuilderDecorator(StudentObject);
     
     var student = new StudentObjectBuilder().name(student1.name).build();
     student.name().should.equal(student1.name);
@@ -41,7 +41,7 @@ describe('#BuildDecorator', function() {
       this.age = 17;
       this.address = {};
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass);
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
         
     var student = new StudentClassBuilder()
       .name(student1.name)
@@ -60,7 +60,7 @@ describe('#BuildDecorator', function() {
       this.age = 17;
       this.address = {}
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass);
+    var StudentClassBuilder = new BuilderDecorator(StudentClass);
         
     var newStudent1 = new StudentClassBuilder()
       .name(student1.name)
@@ -81,7 +81,7 @@ describe('#BuildDecorator', function() {
         return "My name is " + this.name() + ", and I am " + this.age() + " years old.";
       };
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     
     var student = new StudentClassBuilder()
       .name("John")
@@ -98,7 +98,7 @@ describe('#BuildDecorator', function() {
         return "My name is " + this.name() + ", and I am " + this.age() + " years old.";
       };
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     
     var student = new StudentClassBuilder()
       .name("John")
@@ -115,7 +115,7 @@ describe('#BuildDecorator', function() {
         // Do whatever
       };
     };
-    var StudentClassBuilder = new BuildDecorator(StudentClass, {lockFunctionsAfterBuild: false});
+    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: false});
     
     var student = new StudentClassBuilder()
       .prettyName(function() { return "Hey!"; })

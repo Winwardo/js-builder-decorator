@@ -1,5 +1,5 @@
-// MIT License, Topher Winward 2015.
-// https://github.com/Winwardo/js-builder-decorator
+//! MIT License, Topher Winward 2015.
+//! https://github.com/Winwardo/js-builder-decorator
 "use strict";
 
 /**

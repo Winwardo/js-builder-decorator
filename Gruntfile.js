@@ -14,9 +14,21 @@ module.exports = function(grunt) {
         },
         src: ['test/**/*.js']
       }
+    },    
+    uglify: {
+      my_target: {
+        files: {
+          'builder-decorator.min.js': ['builder-decorator.js']
+        }
+      },
+      options: {
+        preserveComments: 'some'
+      }
     }
   });
-
+  
+  grunt.loadNpmTasks('grunt-contrib-uglify'); // load the given tasks
+  grunt.registerTask('default', ['uglify']); // Default grunt tasks maps to grunt
   grunt.registerTask('build', []);
   grunt.registerTask('test', 'mochaTest');
 };

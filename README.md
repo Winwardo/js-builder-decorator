@@ -13,9 +13,9 @@ Decorate any Javascript object with a convenient builder, which returns an immut
       this.address = {};
       this.prettyName = function(){};
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
   
-    var student = new StudentClassBuilder()
+    var student = StudentClassBuilder()
       .name("John")
       .age(17)
       .address({postcode: "90210"})
@@ -28,8 +28,8 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
     
 ###Locking functions after build
-    var StudentClassBuilderLocked = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
-    var student = new StudentClassBuilderLocked()
+    var StudentClassBuilderLocked = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var student = StudentClassBuilderLocked()
       .name("John")
       .prettyName(function(){ return "Hi, I'm " + this.name() + "!"; })
       .build();
@@ -39,10 +39,10 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     
 ###Enforcing no null fields
 	// Throwing exception if any field isn't set
-	var StudentClassBuilderNoNulls = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+	var StudentClassBuilderNoNulls = BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
 
 	try {
-		var student = new StudentClassBuilderNoNulls().build(); // This throws an exception
+		var student = StudentClassBuilderNoNulls().build(); // This throws an exception
 	} catch (E) {
 		console.log(E); // The following fields were not set: name,age,address,prettyName
 	}

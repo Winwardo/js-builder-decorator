@@ -20,9 +20,9 @@ describe('#BuilderDecorator', function() {
     var StudentClass = function(){
       this.name = "A name";
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
     
-    var student = new StudentClassBuilder().name(student1.name).build();
+    var student = StudentClassBuilder().name(student1.name).build();
     student.name().should.equal(student1.name);
   });
   
@@ -30,9 +30,9 @@ describe('#BuilderDecorator', function() {
     var StudentObject = {
       name: "A name"
     };
-    var StudentObjectBuilder = new BuilderDecorator(StudentObject);
+    var StudentObjectBuilder = BuilderDecorator(StudentObject);
     
-    var student = new StudentObjectBuilder().name(student1.name).build();
+    var student = StudentObjectBuilder().name(student1.name).build();
     student.name().should.equal(student1.name);
   });
   
@@ -42,9 +42,9 @@ describe('#BuilderDecorator', function() {
       this.age = 17;
       this.address = {};
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
         
-    var student = new StudentClassBuilder()
+    var student = StudentClassBuilder()
       .name(student1.name)
       .age(student1.age)
       .address(student1.address)
@@ -61,12 +61,12 @@ describe('#BuilderDecorator', function() {
       this.age = 17;
       this.address = {}
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
         
-    var newStudent1 = new StudentClassBuilder()
+    var newStudent1 = StudentClassBuilder()
       .name(student1.name)
       .build();
-    var newStudent2 = new StudentClassBuilder()
+    var newStudent2 = StudentClassBuilder()
       .name(student2.name)
       .build();
       
@@ -82,9 +82,9 @@ describe('#BuilderDecorator', function() {
         return "My name is " + this.name() + ", and I am " + this.age() + " years old.";
       };
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var StudentClassBuilder = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     
-    var student = new StudentClassBuilder()
+    var student = StudentClassBuilder()
       .name("John")
       .age(18)
       .build();
@@ -99,9 +99,9 @@ describe('#BuilderDecorator', function() {
         return "My name is " + this.name() + ", and I am " + this.age() + " years old.";
       };
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
+    var StudentClassBuilder = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     
-    var student = new StudentClassBuilder()
+    var student = StudentClassBuilder()
       .name("John")
       .age(18)
       .prettyName(function() { return "Hey!"; })
@@ -116,9 +116,9 @@ describe('#BuilderDecorator', function() {
         // Do whatever
       };
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: false});
+    var StudentClassBuilder = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: false});
     
-    var student = new StudentClassBuilder()
+    var student = StudentClassBuilder()
       .prettyName(function() { return "Hey!"; })
       .build();
 
@@ -130,9 +130,9 @@ describe('#BuilderDecorator', function() {
     var StudentClass = function(){
       this.name = "A name";
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
     
-    var student = new StudentClassBuilder().name(null).build();
+    var student = StudentClassBuilder().name(null).build();
     should.equal(student.name(), null);
   });
   
@@ -140,9 +140,9 @@ describe('#BuilderDecorator', function() {
     var StudentClass = function(){
       this.name = "A name";
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass);
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
     
-    var student = new StudentClassBuilder().build();
+    var student = StudentClassBuilder().build();
     should.equal(student.name(), "A name");
   });
   
@@ -150,11 +150,11 @@ describe('#BuilderDecorator', function() {
     var StudentClass = function(){
       this.name = "A name";
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+    var StudentClassBuilder = BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
     
     // Name not set
     expect(function(){
-      var student = new StudentClassBuilder().build();
+      var student = StudentClassBuilder().build();
     }).to.throw("The following fields were not set: name");
   });
   
@@ -163,11 +163,11 @@ describe('#BuilderDecorator', function() {
       this.name = "A name";
       this.age = 17;
     };
-    var StudentClassBuilder = new BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
+    var StudentClassBuilder = BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
     
     // Name not set
     expect(function(){
-      var student = new StudentClassBuilder().build();
+      var student = StudentClassBuilder().build();
     }).to.throw("The following fields were not set: name,age");
   });
 });

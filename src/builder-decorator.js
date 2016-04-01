@@ -62,7 +62,7 @@
                             var unsetFields = [];
                             for (var field in builderData) {
                                 var fieldData = builderData[field];
-                                if (fieldData === null) {
+                                if (fieldData === null || fieldData === undefined) {
                                     unsetFields.push(field);
                                 }
                             }

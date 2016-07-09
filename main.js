@@ -1,4 +1,4 @@
-var BuilderDecorator = require('./builder-decorator.js');
+var BuilderDecorator = require('./builder-decorator.min.js');
 module.exports = {
-	                  BuilderDecorator,
+	BuilderDecorator,
 };

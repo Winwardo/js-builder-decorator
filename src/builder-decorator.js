@@ -8,20 +8,6 @@
      * Decorate any given object or class with builder functions
      */
     var BuilderDecorator = function(decorated_, options) {
-        var decorated;
-        if (decorated_ instanceof Function) {
-            decorated = new decorated_();
-        } else {
-            decorated = decorated_;
-        }
-
-        // -----
-        
-        if (options == undefined) {
-            options = {};
-        }
-        
-        // -----
         
         var createSafeCopy = function(e) {
             var copy = Object.create(e);            
@@ -40,7 +26,11 @@
                 return obj;
             }
          
-            var temp = obj.constructor(); // give temp the original obj's constructor
+            var temp = obj;
+            // if (obj.constructor instanceof Function) {
+            //     temp = obj.constructor(); // give temp the original obj's constructor
+            // }
+
             for (var key in obj) {
                 temp[key] = cloneObject(obj[key]);
             }
@@ -50,55 +40,97 @@
 
         // -----
        
-        var builderObj = {}
-        builderObj.__builderData = {}
-
-        
-
-        var makeSetter = function(fieldName) {
-            return function(a) {
-                var copy = cloneObject(this);
-                copy.__builderData[fieldName] = a;
-                console.log("this, copy")
-                console.log(this);
-                console.log(copy);
-                return copy;
+        var doIt = function(decorated_) {
+            var decorated;
+            if (decorated_ instanceof Function) {
+                decorated = cloneObject(new decorated_());
+            } else {
+                decorated = cloneObject(decorated_);
             }
-        }
 
-        var applySetters = function(builderObj__, decorated__) {
-            for (var x in decorated__) {
-                builderObj__[x] = makeSetter(x);
+            // -----
+            
+            if (options == undefined) {
+                options = {};
             }
-        }
 
-        applySetters(builderObj, decorated);
 
-        builderObj.build = function() {
-            var that = this;
+            var builderObj = {}
+            builderObj.__builderData = decorated
 
-            var response = {}
+            
 
-            var makeGetter = function(builderData, w) {
-                return function() {
-                    return builderData[w];
+            var makeSetter = function(fieldName) {
+                return function(a) {
+                    // var copy = cloneObject(this);
+                    // copy.__builderData[fieldName] = a;
+                    // console.log("this, copy")
+                    // console.log(this);
+                    // console.log(copy);
+
+                    var builderData = cloneObject(this.__builderData)
+                    builderData[fieldName] = a;
+
+                    var copy = {}
+                    applySetters(copy, cloneObject(decorated))
+                    applyBuilder(copy)
+                    copy.__builderData = builderData;
+
+                    console.log("copy", copy)
+
+                    return copy;
                 }
             }
 
-            for (var x in decorated) {
-                // response[x] = function() { return that.__builderData[x]; }
-                response[x] = makeGetter(that.__builderData, x)
+            var applySetters = function(builderObj__, decorated__) {
+                for (var x in decorated__) {
+                    builderObj__[x] = makeSetter(x);
+                }
             }
 
-            // console.log("Building:")
-            // console.log(response)
+            applySetters(builderObj, decorated);
 
-            return response
+            var applyBuilder = function(builderObj__) {
+                builderObj__.build = function() {
+                    var that = this;
+
+                    var response = {}
+
+                    var makeGetter = function(builderData, w) {
+                        return function() {
+                            return builderData[w];
+                        }
+                    }
+
+                    for (var x in decorated) {
+                        // response[x] = function() { return that.__builderData[x]; }
+                        // response[x] = makeGetter(that.__builderData, x)
+
+                        if (options.lockFunctionsAfterBuild && decorated[x] instanceof Function) {
+                            console.log("FUNCTIONY GOODNESS")
+                            console.log(that)
+                            response[x] = that.__builderData[x]
+                        } else {
+                            response[x] = makeGetter(that.__builderData, x)
+                        }
+                    }
+
+                    // console.log("Building:")
+                    // console.log(response)
+
+                    return response
+                }
+            }
+            applyBuilder(builderObj)
+
+            // console.log("builderObj")
+            // console.log(builderObj)
+
+            // return function() { return builderObj }
+            return builderObj
         }
-
-        // console.log("builderObj")
-        // console.log(builderObj)
-        return function() { return builderObj }
+        return function() { return doIt(decorated_) }
+        // return doIt(decorated_);
     };
     
     // NPM exports

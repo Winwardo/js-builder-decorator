@@ -17,12 +17,14 @@
         // console.log(_.clone)
 
         var createSafeCopy = function(e) {
-            var copy = Object.create(e);            
+            var copy = cloneObject(e)      
+
             if (options.allFieldsMustBeSet === true) {
                 for (var field in copy) {
                     copy[field] = null;
                 }
-            }            
+            }
+
             return copy;
         }
                 
@@ -53,22 +55,24 @@
         // -----
        
         var doIt = function(decorated_) {
-            var decorated;
-            if (decorated_ instanceof Function) {
-                decorated = cloneObject(new decorated_());
-            } else {
-                decorated = cloneObject(decorated_);
-            }
-
-            // -----
-            
             if (options == undefined) {
                 options = {};
             }
 
+            var decorated;
+            if (decorated_ instanceof Function) {
+                decorated = createSafeCopy(new decorated_());
+            } else {
+                decorated = createSafeCopy(decorated_);
+            }
+
+            // -----
+            
+            
+
 
             var builderObj = {}
-            builderObj.__builderData = decorated
+            builderObj.__builderData = decorated           
 
             
 
@@ -111,6 +115,24 @@
                 var b = cloneObject(builderObj__);
                 b.build = function() {
                     var that = cloneObject(this);
+
+                    // check all fields are set
+                    if (options.allFieldsMustBeSet) {
+                        console.log("ALL SET NEEDED")
+                        var unsetFields = [];
+                        for (var field in that.__builderData) {
+                            console.log("field", field)
+                            var fieldData = that.__builderData[field];
+                            if (fieldData === null || fieldData === undefined) {
+                                console.log("not null?")
+                                unsetFields.push(field);
+                            }
+                        }
+                        
+                        if (unsetFields.length !== 0) {
+                            throw "The following fields were not set: " + unsetFields
+                        }
+                    }
 
                     var response = {}
 

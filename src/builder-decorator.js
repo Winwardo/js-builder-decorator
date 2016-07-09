@@ -14,10 +14,12 @@
         var _ = require('underscore');
         var deepFreeze = require('deep-freeze');
 
-        var createSafeCopy = function(e) {
-            var copy = cloneObject(e)      
+        // -----
 
-            if (options.allFieldsMustBeSet === true) {
+        var createSafeCopy = function(e, allFieldsMustBeSet) {
+            var copy = cloneObjectWithFunctions(e)      
+
+            if (allFieldsMustBeSet === true) {
                 for (var field in copy) {
                     copy[field] = null;
                 }
@@ -28,7 +30,7 @@
                 
         // -----
 
-        function cloneObject(obj) {
+        function cloneObjectWithFunctions(obj) {
             if (obj === null || typeof obj !== 'object') {
                return obj;
             }
@@ -36,7 +38,7 @@
             var temp = obj;
 
             for (var key in obj) {
-                temp[key] = cloneObject(obj[key]);
+                temp[key] = cloneObjectWithFunctions(obj[key]);
             }
          
             return temp;
@@ -44,30 +46,26 @@
 
         // -----
        
-        var doIt = function(decorated_) {
-            if (options == undefined) {
-                options = {};
+        var newBuilder = function(decorated_, options_) {
+            if (options_ == undefined) {
+                options_ = {};
             }
 
             var decorated;
             if (decorated_ instanceof Function) {
-                decorated = createSafeCopy(new decorated_());
+                decorated = createSafeCopy(new decorated_(), options_.allFieldsMustBeSet);
             } else {
-                decorated = createSafeCopy(decorated_);
+                decorated = createSafeCopy(decorated_, options_.allFieldsMustBeSet);
             }
 
             // -----
 
-            var builderObj = {}
-            builderObj.__builderData = decorated           
-
-            
+            var builderObj = {__builderData: decorated}            
 
             var makeSetter = function(fieldName) {
-                return function(a) {
+                return function(fieldData) {
                     var builderData = _.clone(this.__builderData)
-                    builderData[fieldName] = a;
-
+                    builderData[fieldName] = fieldData;
 
                     var copy = {}
                     copy = applySetters(copy, decorated)
@@ -79,22 +77,22 @@
             }
 
             var applySetters = function(builderObj__, decorated__) {
-                var b = cloneObject(builderObj__);
-                for (var x in decorated__) {
-                    b[x] = makeSetter(x);
+                var newBuilderObj = cloneObjectWithFunctions(builderObj__);
+                for (var field in decorated__) {
+                    newBuilderObj[field] = makeSetter(field);
                 }
-                return b;
+                return newBuilderObj;
             }
 
             builderObj = applySetters(builderObj, decorated);
 
             var applyBuilder = function(builderObj__) {
-                var b = cloneObject(builderObj__);
-                b.build = function() {
+                var newBuilderObj = cloneObjectWithFunctions(builderObj__);
+                newBuilderObj.build = function() {
                     var that = this;
 
                     // check all fields are set
-                    if (options.allFieldsMustBeSet) {
+                    if (options_.allFieldsMustBeSet) {
                         var unsetFields = [];
                         for (var field in that.__builderData) {
                             var fieldData = that.__builderData[field];
@@ -117,29 +115,30 @@
                         if (bData === null) {
                             result = null
                         } else {
-                            result = deepFreeze(cloneObject(builderData[w]));
+                            result = deepFreeze(cloneObjectWithFunctions(builderData[w]));
                         }
+
                         return function() {
-                            return Object.freeze(result);
+                            return result;
                         }
                     }
 
-                    for (var x in decorated) {
-                        if (options.lockFunctionsAfterBuild && decorated[x] instanceof Function) {
-                            response[x] = that.__builderData[x]
+                    for (var field in decorated) {
+                        if (options_.lockFunctionsAfterBuild && decorated[field] instanceof Function) {
+                            response[field] = that.__builderData[field]
                         } else {
-                            response[x] = makeGetter(that.__builderData, x)
+                            response[field] = makeGetter(that.__builderData, field)
                         }
                     }
 
                     return response
                 }
-                return b;
+                return newBuilderObj;
             }
             builderObj = applyBuilder(builderObj)
             return builderObj
         }
-        return function() { return doIt(decorated_) }
+        return function() { return newBuilder(decorated_, options) }
     };
     
     // NPM exports

@@ -7,7 +7,16 @@
     /**
      * Decorate any given object or class with builder functions
      */
-    var BuilderDecorator = function(decorated, options) {
+    var BuilderDecorator = function(decorated_, options) {
+        var decorated;
+        if (decorated_ instanceof Function) {
+            decorated = new decorated_();
+        } else {
+            decorated = decorated_;
+        }
+
+        console.log("decorated", decorated)
+
         // -----
         
         if (options == undefined) {
@@ -27,106 +36,74 @@
         }
                 
         // -----
-       
-        var main = function() {
-            var builderData = {},
-                builderObj = {}
-            
-            // -----
-            
-            var makeSetter = function(fieldname) {
-                return function(fielddata) {
-                    builderData[fieldname] = fielddata;
-                    return this;
-                };
-            };
-            
-            // -----
-            
-            var createAllSetters = function() {
-                for (var x in decorated) {
-                    builderObj[x] = makeSetter(x);
-                }
-            };
-            
-            // -----
-            
-            var createBuildFunction = function() {
-                builderObj.build = function(){
-                    var builtObj = {}
-                    
-                    // -----
-                    
-                    var checkAllFieldsSet = function () {
-                        if (options.allFieldsMustBeSet === true) {
-                            var unsetFields = [];
-                            for (var field in builderData) {
-                                var fieldData = builderData[field];
-                                if (fieldData === null || fieldData === undefined) {
-                                    unsetFields.push(field);
-                                }
-                            }
-                            
-                            if (unsetFields.length !== 0) {
-                                throw "The following fields were not set: " + unsetFields
-                            }
-                        }
-                    };
-                    
-                    // -----
-                    
-                    var createAllGetters = function() {
-                        var makeGetter = function(w){
-                            return function(){
-                                return builderData[w];
-                            };
-                        };
-                        
-                        // -----
-                    
-                        for (var y in builderData) {
-                            if (options.lockFunctionsAfterBuild && decorated[y] instanceof Function) {
-                                builtObj[y] = builderData[y];
-                            }
-                            else
-                            {
-                                builtObj[y] = makeGetter(y);
-                            };
-                        };
-                    };
-                    
-                    // -----
-                    
-                    checkAllFieldsSet();
-                    createAllGetters();
-                    
-                    return builtObj;
-                };
+
+        function cloneObject(obj) {
+            if (obj === null || typeof obj !== 'object') {
+                return obj;
             }
-            
-            // -----
-            
-            var makeBuilderObj = function() {
-                if (decorated instanceof Function) {
-                    decorated = new decorated();
-                }
-                else if (decorated instanceof Array) {
-                    throw(new Error("An array may not be decorated."));
-                }
-                
-                builderData = createSafeCopy(decorated);
-                createAllSetters();
-                createBuildFunction();
-                
-                return builderObj; 
-            }            
-            
-            // -----
-            
-            return makeBuilderObj();
+         
+            var temp = obj.constructor(); // give temp the original obj's constructor
+            for (var key in obj) {
+                temp[key] = cloneObject(obj[key]);
+            }
+         
+            return temp;
         }
-        
-        return main
+
+        // -----
+       
+        var builderObj = {}
+        builderObj.__builderData = {}
+
+        for (var x in decorated) {
+            // var x = 'name'
+            console.log("poo")
+            console.log(x)
+            console.log(x === 'name')
+
+            builderObj[x] = function(a) {
+                // var copy = JSON.parse(JSON.stringify(this));
+                var copy = cloneObject(this);
+                copy.__builderData[x] = a;
+                console.log("this, copy")
+                console.log(this);
+                console.log(copy);
+                // console.log(copy.name)
+                return copy;
+            }
+        }
+
+        // Create setters
+        // for (var x in decorated) {
+        //     console.log(x)
+        //     builderObj[x] = function(a) {
+        //         var copy = cloneObject(this);
+        //         copy.__builderData[x]=a;
+        //         console.log("this, copy")
+        //         console.log(this);
+        //         console.log(copy);
+        //         return copy;
+        //     }
+        // }
+
+        builderObj.build = function() {
+            var that = this;
+
+            var response = {}
+            // var x = 'name';
+            for (var x in decorated) {
+                response[x] = function() { return that.__builderData[x]; }
+            }
+
+            return response
+
+            // for (var x in )
+
+        }
+
+        // console.log("builderObj")
+        // console.log(builderObj)
+        return function() { return builderObj }
     };
     
     // NPM exports

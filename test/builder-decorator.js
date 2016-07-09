@@ -170,4 +170,18 @@ describe('#BuilderDecorator', function() {
       var student = StudentClassBuilder().build();
     }).to.throw("The following fields were not set: name,age");
   });
+
+  it('creates a new immutable copy on each set', function(){
+    var StudentClass = function(){
+      this.name = undefined;
+      this.other = "ignore"
+    };
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
+    
+    var studentJohn = StudentClassBuilder().name("John");
+    var studentSteve = studentJohn.name("Steve");
+
+    should.equal(studentJohn.build().name(), "John");
+    should.equal(studentSteve.build().name(), "Steve");
+  });
 });

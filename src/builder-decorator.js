@@ -10,7 +10,9 @@
      * Decorate any given object or class with builder functions
      */
     var BuilderDecorator = function(decorated_, options) {
-        var _ = require('underscore')
+        'use strict'; 
+        var _ = require('underscore');
+        var deepFreeze = require('deep-freeze');
 
         var createSafeCopy = function(e) {
             var copy = cloneObject(e)      
@@ -68,18 +70,18 @@
 
 
                     var copy = {}
-                    copy = applySetters(copy, cloneObject(decorated))
+                    copy = applySetters(copy, decorated)
                     applyBuilder(copy)
                     copy.__builderData = builderData;
 
-                    return cloneObject(copy);
+                    return copy;
                 }
             }
 
             var applySetters = function(builderObj__, decorated__) {
                 var b = cloneObject(builderObj__);
                 for (var x in decorated__) {
-                    b[x] = cloneObject(makeSetter(x));
+                    b[x] = makeSetter(x);
                 }
                 return b;
             }
@@ -89,7 +91,7 @@
             var applyBuilder = function(builderObj__) {
                 var b = cloneObject(builderObj__);
                 b.build = function() {
-                    var that = cloneObject(this);
+                    var that = this;
 
                     // check all fields are set
                     if (options.allFieldsMustBeSet) {
@@ -109,8 +111,16 @@
                     var response = {}
 
                     var makeGetter = function(builderData, w) {
+                        var result;
+                        var bData = builderData[w];
+
+                        if (bData === null) {
+                            result = null
+                        } else {
+                            result = deepFreeze(cloneObject(builderData[w]));
+                        }
                         return function() {
-                            return cloneObject(builderData[w]);
+                            return Object.freeze(result);
                         }
                     }
 

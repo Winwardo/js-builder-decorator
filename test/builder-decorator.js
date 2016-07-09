@@ -1,7 +1,8 @@
+'use strict';
+
 var should = require('chai').should(),
-    expect = require('chai').expect
-    builder_decorator = require('../src/builder-decorator'),
-    BuilderDecorator = builder_decorator.BuilderDecorator;
+    expect = require('chai').expect,
+    BuilderDecorator = require('../src/builder-decorator').BuilderDecorator;
 
 var student1 = {
   name: "John",
@@ -183,5 +184,20 @@ describe('#BuilderDecorator', function() {
 
     should.equal(studentJohn.build().name(), "John");
     should.equal(studentSteve.build().name(), "Steve");
+  });
+
+  it('deep freezes responses from getters to avoid accidental mutation', function(){
+    var StudentClass = function(){
+      this.details = {};
+    };
+    var StudentClassBuilder = BuilderDecorator(StudentClass);
+    
+    var student = StudentClassBuilder().details({mark: 50}).build();
+    var data = student.details()
+    
+    expect(function(){
+      data.mark = 20;
+    }).to.throw();
+
   });
 });

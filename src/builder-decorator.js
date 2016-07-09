@@ -11,9 +11,8 @@
   var BuilderDecorator = function (decorated_, options) {
     'use strict';
     var _ = require('underscore');
-    var deepFreeze = require('deep-freeze');
 
-        // -----
+    // -----
 
     var createSafeCopy = function (e, allFieldsMustBeSet) {
       var copy = cloneObjectWithFunctions(e);
@@ -114,7 +113,7 @@
             if (bData === null) {
               result = null;
             } else {
-              result = deepFreeze(cloneObjectWithFunctions(builderData[w]));
+              result = cloneObjectWithFunctions(builderData[w]);
             }
 
             return function () {

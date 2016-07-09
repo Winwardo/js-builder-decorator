@@ -185,18 +185,4 @@ describe('#BuilderDecorator', function () {
     should.equal(studentJohn.build().name(), 'John');
     should.equal(studentSteve.build().name(), 'Steve');
   });
-
-  it('deep freezes responses from getters to avoid accidental mutation', function () {
-    var StudentClass = function () {
-      this.details = {};
-    };
-    var StudentClassBuilder = BuilderDecorator(StudentClass);
-
-    var student = StudentClassBuilder().details({ mark: 50 }).build();
-    var data = student.details();
-
-    expect(function () {
-      data.mark = 20;
-    }).to.throw();
-  });
 });

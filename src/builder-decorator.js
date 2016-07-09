@@ -15,8 +15,6 @@
             decorated = decorated_;
         }
 
-        console.log("decorated", decorated)
-
         // -----
         
         if (options == undefined) {
@@ -55,50 +53,47 @@
         var builderObj = {}
         builderObj.__builderData = {}
 
-        for (var x in decorated) {
-            // var x = 'name'
-            console.log("poo")
-            console.log(x)
-            console.log(x === 'name')
+        
 
-            builderObj[x] = function(a) {
-                // var copy = JSON.parse(JSON.stringify(this));
+        var makeSetter = function(fieldName) {
+            return function(a) {
                 var copy = cloneObject(this);
-                copy.__builderData[x] = a;
+                copy.__builderData[fieldName] = a;
                 console.log("this, copy")
                 console.log(this);
                 console.log(copy);
-                // console.log(copy.name)
                 return copy;
             }
         }
 
-        // Create setters
-        // for (var x in decorated) {
-        //     console.log(x)
-        //     builderObj[x] = function(a) {
-        //         var copy = cloneObject(this);
-        //         copy.__builderData[x]=a;
-        //         console.log("this, copy")
-        //         console.log(this);
-        //         console.log(copy);
-        //         return copy;
-        //     }
-        // }
+        var applySetters = function(builderObj__, decorated__) {
+            for (var x in decorated__) {
+                builderObj__[x] = makeSetter(x);
+            }
+        }
+
+        applySetters(builderObj, decorated);
 
         builderObj.build = function() {
             var that = this;
 
             var response = {}
-            // var x = 'name';
-            for (var x in decorated) {
-                response[x] = function() { return that.__builderData[x]; }
+
+            var makeGetter = function(builderData, w) {
+                return function() {
+                    return builderData[w];
+                }
             }
 
+            for (var x in decorated) {
+                // response[x] = function() { return that.__builderData[x]; }
+                response[x] = makeGetter(that.__builderData, x)
+            }
+
+            // console.log("Building:")
+            // console.log(response)
+
             return response
-
-            // for (var x in )
-
         }
 
         // console.log("builderObj")

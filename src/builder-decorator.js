@@ -142,7 +142,7 @@
 
     // NPM exports
   if (typeof module !== 'undefined') {
-    module.exports = { BuilderDecorator };
+    module.exports = { BuilderDecorator: BuilderDecorator };
   }
 
     // Standard js exports

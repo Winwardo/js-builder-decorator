@@ -10,11 +10,7 @@
      * Decorate any given object or class with builder functions
      */
     var BuilderDecorator = function(decorated_, options) {
-        // var $ = require("jquery");
-        // console.log("jquery", $)
-
         var _ = require('underscore')
-        // console.log(_.clone)
 
         var createSafeCopy = function(e) {
             var copy = cloneObject(e)      
@@ -31,19 +27,11 @@
         // -----
 
         function cloneObject(obj) {
-            // return Object.assign(obj)
-
-            // return _.clone(obj)
-            // console.log(_.clone(obj))
-
             if (obj === null || typeof obj !== 'object') {
                return obj;
             }
          
             var temp = obj;
-            // if (obj.constructor instanceof Function) {
-            //     temp = obj.constructor(); // give temp the original obj's constructor
-            // }
 
             for (var key in obj) {
                 temp[key] = cloneObject(obj[key]);
@@ -67,9 +55,6 @@
             }
 
             // -----
-            
-            
-
 
             var builderObj = {}
             builderObj.__builderData = decorated           
@@ -78,12 +63,6 @@
 
             var makeSetter = function(fieldName) {
                 return function(a) {
-                    // var copy = cloneObject(this);
-                    // copy.__builderData[fieldName] = a;
-                    
-                    console.log("before")
-                    console.log("this", this.__builderData)
-
                     var builderData = _.clone(this.__builderData)
                     builderData[fieldName] = a;
 
@@ -92,10 +71,6 @@
                     copy = applySetters(copy, cloneObject(decorated))
                     applyBuilder(copy)
                     copy.__builderData = builderData;
-
-                    console.log("after")
-                    console.log("this", this.__builderData);
-                    console.log("copy", copy.__builderData);
 
                     return cloneObject(copy);
                 }
@@ -118,13 +93,10 @@
 
                     // check all fields are set
                     if (options.allFieldsMustBeSet) {
-                        console.log("ALL SET NEEDED")
                         var unsetFields = [];
                         for (var field in that.__builderData) {
-                            console.log("field", field)
                             var fieldData = that.__builderData[field];
                             if (fieldData === null || fieldData === undefined) {
-                                console.log("not null?")
                                 unsetFields.push(field);
                             }
                         }
@@ -143,35 +115,21 @@
                     }
 
                     for (var x in decorated) {
-                        // response[x] = function() { return that.__builderData[x]; }
-                        // response[x] = makeGetter(that.__builderData, x)
-
                         if (options.lockFunctionsAfterBuild && decorated[x] instanceof Function) {
-                            // console.log("FUNCTIONY GOODNESS")
-                            // console.log(that)
                             response[x] = that.__builderData[x]
                         } else {
                             response[x] = makeGetter(that.__builderData, x)
                         }
                     }
 
-                    // console.log("Building:")
-                    // console.log(response)
-
                     return response
                 }
                 return b;
             }
             builderObj = applyBuilder(builderObj)
-
-            // console.log("builderObj")
-            // console.log(builderObj)
-
-            // return function() { return builderObj }
             return builderObj
         }
         return function() { return doIt(decorated_) }
-        // return doIt(decorated_);
     };
     
     // NPM exports

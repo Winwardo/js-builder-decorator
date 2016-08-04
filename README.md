@@ -28,7 +28,6 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
 
 ###Requiring in Node:
-   var Builder 
     var BuilderDecorator = require('js-builder-decorator');
 
 ###Locking functions after build

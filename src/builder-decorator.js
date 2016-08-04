@@ -141,7 +141,8 @@
 
     // NPM exports
   if (typeof module !== 'undefined') {
-    module.exports = { BuilderDecorator: BuilderDecorator };
+    BuilderDecorator.BuilderDecorator = BuilderDecorator;
+    module.exports = BuilderDecorator;
   }
 
     // Standard js exports

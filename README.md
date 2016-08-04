@@ -26,7 +26,13 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.age();        // 17
     student.address();    // {postcode: "90210"}
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
-    
+
+###Requiring in Node:
+
+###Requiring in Node:
+   var Builder 
+    var BuilderDecorator = require('js-builder-decorator');
+
 ###Locking functions after build
     var StudentClassBuilderLocked = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     var student = StudentClassBuilderLocked()

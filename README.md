@@ -5,7 +5,7 @@ Decorate any Javascript object with a convenient builder, which returns an immut
 [![npm version](https://badge.fury.io/js/js-builder-decorator.svg)](http://badge.fury.io/js/js-builder-decorator)
 [![npm version](https://david-dm.org/winwardo/js-builder-decorator.svg)](https://david-dm.org/winwardo/js-builder-decorator)
 
-###Standard usage:
+### Standard usage:
 
     var StudentClass = function(){
       this.name = "Some default name";
@@ -27,10 +27,10 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.address();    // {postcode: "90210"}
     student.prettyName(); // function(){ return "Hi, I'm " + this.name() + "!"; }
     
-###Requiring in Node:
+### Requiring in Node:
     var BuilderDecorator = require('js-builder-decorator').BuilderDecorator;
 
-###Locking functions after build
+### Locking functions after build
     var StudentClassBuilderLocked = BuilderDecorator(StudentClass, {lockFunctionsAfterBuild: true});
     var student = StudentClassBuilderLocked()
       .name("John")
@@ -40,7 +40,7 @@ Decorate any Javascript object with a convenient builder, which returns an immut
     student.name();       // "John"
     student.prettyName(); // "Hi, I'm John!"
     
-###Enforcing no null fields
+### Enforcing no null fields
 	// Throwing exception if any field isn't set
 	var StudentClassBuilderNoNulls = BuilderDecorator(StudentClass, {allFieldsMustBeSet: true});
 
@@ -50,6 +50,6 @@ Decorate any Javascript object with a convenient builder, which returns an immut
 		console.log(E); // The following fields were not set: name,age,address,prettyName
 	}
 
-##Installation
+## Installation
 If you have Node.js installed, run `npm i js-builder-decorator` in your project directory.  
 Else, you can download the latest version from Github [here](https://raw.githubusercontent.com/Winwardo/js-builder-decorator/master/builder-decorator.min.js).
